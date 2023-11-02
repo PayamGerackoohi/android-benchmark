@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Android Benchmark</string>
+    <string name="operation_addition">Addition</string>
+    <string name="operation_subtraction">Subtraction</string>
+    <string name="operation_multiplication">Multiplication</string>
+    <string name="operation_division">Division</string>
+    <string name="operation_power">Power</string>
+    <string name="operation_root">Root</string>
+</resources>
