@@ -4,11 +4,11 @@ import androidx.test.filters.SmallTest
 import com.payamgr.androidbenchmark.data.model.Operation
 import com.payamgr.androidbenchmark.util.forEachThis
 import org.assertj.core.api.Assertions.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 @SmallTest
 class CalculatorStateTest {
-    data class Data(val a: Int, val b: Int, val result: String)
+    data class Data(val num1: Int, val num2: Int, val result: String)
 
     @Test
     fun `addition test`() {
@@ -27,8 +27,8 @@ class CalculatorStateTest {
 
             Data(1000, 1000, "2,000"),
         ).forEachThis {
-            val state = CalculatorState(a, b, Operation.Add)
-            assertThat(state.result).`as`("(%s) + (%s)", a, b).isEqualTo(result)
+            val state = CalculatorState(num1, num2, Operation.Add)
+            assertThat(state.result).`as`("(%s) + (%s)", num1, num2).isEqualTo(result)
         }
     }
 
@@ -49,8 +49,8 @@ class CalculatorStateTest {
 
             Data(1000, -1000, "2,000"),
         ).forEachThis {
-            val state = CalculatorState(a, b, Operation.Sub)
-            assertThat(state.result).`as`("(%s) - (%s)", a, b).isEqualTo(result)
+            val state = CalculatorState(num1, num2, Operation.Sub)
+            assertThat(state.result).`as`("(%s) - (%s)", num1, num2).isEqualTo(result)
         }
     }
 
@@ -71,8 +71,8 @@ class CalculatorStateTest {
 
             Data(100, 100, "10,000"),
         ).forEachThis {
-            val state = CalculatorState(a, b, Operation.Mul)
-            assertThat(state.result).`as`("(%s) * (%s)", a, b).isEqualTo(result)
+            val state = CalculatorState(num1, num2, Operation.Mul)
+            assertThat(state.result).`as`("(%s) * (%s)", num1, num2).isEqualTo(result)
         }
     }
 
@@ -94,9 +94,9 @@ class CalculatorStateTest {
             Data(1, 3, "0.3333"),
             Data(10_000, 3, "3,333.3333"),
         ).forEachThis {
-            val state = CalculatorState(a, b, Operation.Div)
+            val state = CalculatorState(num1, num2, Operation.Div)
 //            println("Data($a, $b, \"${state.result}\"),")
-            assertThat(state.result).`as`("(%s) / (%s)", a, b).isEqualTo(result)
+            assertThat(state.result).`as`("(%s) / (%s)", num1, num2).isEqualTo(result)
         }
     }
 
@@ -163,15 +163,15 @@ class CalculatorStateTest {
             Data(-4, -2, "0.0625"),
             Data(-1_000, 3, "-1,000,000,000"),
         ).forEachThis {
-            val state = CalculatorState(a, b, Operation.Pow)
+            val state = CalculatorState(num1, num2, Operation.Pow)
 //            println("Data($a, $b, \"${state.result}\"),")
-            assertThat(state.result).`as`("(%s) ^ (%s)", a, b).isEqualTo(result)
+            assertThat(state.result).`as`("(%s) ^ (%s)", num1, num2).isEqualTo(result)
         }
     }
 
     /**
      * It's fully tested at "RootCalculatorTest.`root test`". Just to make jacoco happy.
-     * @see [RootCalculatorTest]
+     * @see [com.payamgr.androidbenchmark.data.RootCalculatorTest]
      */
     @Test
     fun `root test`() {

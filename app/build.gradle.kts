@@ -1,58 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-object Versions {
-    val app = App()
-    val libraries = Libraries()
-
-    class App {
-        val name = "1.0.0"
-        val code = 1
-    }
-
-    class Libraries {
-        val mavericks = "3.0.7"
-        val hilt = "2.44"
-        val android = Android()
-        val test = Test()
-
-        class Android {
-            val core = "1.9.0"
-            val kotlin = Kotlin()
-            val compose = Compose()
-
-            class Kotlin {
-                val lifecycleRuntime = "2.6.2"
-            }
-
-            class Compose {
-                val bom = "2023.03.00"
-                val activity = "1.8.0"
-                val icons = "1.5.3"
-            }
-        }
-
-        class Test {
-            val assertj = "3.11.1"
-            val mockk = "1.13.8"
-            val espresso = "3.5.1"
-            val jUnit = "4.13.2"
-            val jUnitExt = "1.1.5"
-            val android = Android()
-            val kotlin = Kotlin()
-
-            class Android {
-                val runner = "1.5.2"
-            }
-
-            class Kotlin {
-                val coroutine = "1.6.4"
-            }
-        }
-
-        operator fun invoke(action: Libraries.() -> Unit) = action()
-    }
-}
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -87,15 +34,17 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-    kotlin {
-        jvmToolchain(17)
+    Versions.apply {
+        compileOptions {
+            sourceCompatibility = java
+            targetCompatibility = java
+        }
+        kotlinOptions {
+            jvmTarget = java.toString()
+        }
+        kotlin {
+            jvmToolchain(java.ordinal + 1)
+        }
     }
     buildFeatures {
         compose = true
@@ -119,7 +68,7 @@ android {
     }
 }
 
-Versions.libraries {
+Versions.dependencies {
     dependencies {
         implementation("androidx.core:core-ktx:${android.core}")
         implementation("androidx.lifecycle:lifecycle-runtime-ktx:${android.kotlin.lifecycleRuntime}")
@@ -135,11 +84,10 @@ Versions.libraries {
         implementation("com.airbnb.android:mavericks-hilt:$mavericks")
         implementation("com.google.dagger:hilt-android:$hilt")
         kapt("com.google.dagger:hilt-android-compiler:$hilt")
-        testImplementation("junit:junit:${test.jUnit}")
+        testImplementation("org.junit.jupiter:junit-jupiter:${test.jUnit}")
         testImplementation("androidx.test:runner:${test.android.runner}")
         testImplementation("org.assertj:assertj-core:${test.assertj}")
         testImplementation("io.mockk:mockk-android:${test.mockk}")
-        androidTestImplementation("androidx.test.ext:junit:${test.jUnitExt}")
         androidTestImplementation("androidx.test:runner:${test.android.runner}")
         androidTestImplementation("androidx.test.espresso:espresso-core:${test.espresso}")
         androidTestImplementation(platform("androidx.compose:compose-bom:${android.compose.bom}"))
@@ -159,6 +107,7 @@ kapt {
 }
 
 tasks.withType<Test> {
+    useJUnitPlatform()
     extensions.configure(JacocoTaskExtension::class) {
         isIncludeNoLocationClasses = true
         excludes = listOf("jdk.internal.*")
@@ -185,4 +134,16 @@ tasks.register("jacocoCoverage", JacocoReport::class) {
     sourceDirectories.setFrom("${project.projectDir}/src/main/java")
     classDirectories.setFrom(files(fileTree("$buildDir/tmp/kotlin-classes/debug") { exclude(excludes) }))
     executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+}
+
+tasks.register("makeTestReport") {
+    dependsOn("connectedDebugAndroidTest", "jacocoCoverage")
+    val folder = "reports"
+    val source = "$buildDir/$folder"
+    val destination = "${project.projectDir}/$folder"
+    delete(destination)
+    copy {
+        from(source)
+        into(destination)
+    }
 }

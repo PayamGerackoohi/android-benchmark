@@ -3,7 +3,7 @@ package com.payamgr.androidbenchmark.data
 import androidx.test.filters.SmallTest
 import com.payamgr.androidbenchmark.util.forEachThis
 import org.assertj.core.api.Assertions
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 @SmallTest
 class DecimalHelperTest {

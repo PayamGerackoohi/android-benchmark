@@ -2,8 +2,8 @@ package com.payamgr.androidbenchmark.data
 
 import androidx.test.filters.SmallTest
 import com.payamgr.androidbenchmark.util.forEachThis
-import org.assertj.core.api.Assertions
-import org.junit.Test
+import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 @SmallTest
 class ComplexTest {
@@ -30,7 +30,7 @@ class ComplexTest {
 
             Data(Complex(1234.4321f, -5678.8765f), "1,234.4321 - 5,678.8765i"),
         ).forEachThis {
-            Assertions.assertThat(c.toString()).`as`("(%s, %s)", c.x, c.y).isEqualTo(result)
+            assertThat(c.toString()).`as`("(%s, %s)", c.x, c.y).isEqualTo(result)
         }
     }
 
@@ -41,7 +41,7 @@ class ComplexTest {
             Data(Complex(0.12345f, 3.45678f), "0.1235 + 3.4568i"),
             Data(Complex(1_234.5f, 3_456.78f), "1,234.5 + 3,456.78i"),
         ).forEachThis {
-            Assertions.assertThat(c.toString()).`as`("(%s, %s, %s)", c.x, c.y, c.precision).isEqualTo(result)
+            assertThat(c.toString()).`as`("(%s, %s, %s)", c.x, c.y, c.precision).isEqualTo(result)
         }
         val precision = 1
         listOf(
@@ -50,7 +50,7 @@ class ComplexTest {
             Data(Complex(1_234f, 5_678.9f), "1,234 + 5,678.9i"),
         ).forEachThis {
             c.precision = precision
-            Assertions.assertThat(c.toString()).`as`("(%s, %s, %s)", c.x, c.y, c.precision).isEqualTo(result)
+            assertThat(c.toString()).`as`("(%s, %s, %s)", c.x, c.y, c.precision).isEqualTo(result)
         }
     }
 }

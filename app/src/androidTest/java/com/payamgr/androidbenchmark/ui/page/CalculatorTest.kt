@@ -50,7 +50,7 @@ class CalculatorTest {
     }
 
     @Test
-    fun choice_noSelected_Test() {
+    fun choice_notSelected_Test() {
         val callback = mockCallback()
         every { callback() } just runs
         rule.setContent { CalculatorView.Choice(operation = Operation.Root, isSelected = false, callback) }
@@ -110,19 +110,21 @@ class CalculatorTest {
                 onValueChange = { value.value = it },
             )
         }
-        // check initial state
+
+        // Check Initial State
         rule.onNodeWithText("0")
             .assertContentDescriptionEquals("Slider 1, Value: 0")
             .assertExists()
 
-        // slide -> 3
+
+        // slide to the end (3)
         rule.onNodeWithContentDescription("Slider 1")
             .performTouchInput { swipeRight() }
         rule.onNodeWithText("3")
             .assertContentDescriptionEquals("Slider 1, Value: 3")
             .assertExists()
 
-        // slide -> -3
+        // Slide to the Start (-3)
         rule.onNodeWithContentDescription("Slider 1")
             .performTouchInput { swipeLeft() }
         rule.onNodeWithText("-3")
