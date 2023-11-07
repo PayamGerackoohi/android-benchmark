@@ -8,15 +8,16 @@ plugins {
     kotlin("kapt")
     jacoco
 }
+val packageName = "com.payamgr.androidbenchmark"
 
 jacoco { toolVersion = "0.8.11" }
 
 android {
-    namespace = "com.payamgr.androidbenchmark"
+    namespace = packageName
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.payamgr.androidbenchmark"
+        applicationId = packageName
         minSdk = 24
         targetSdk = 33
         versionCode = Versions.app.code
@@ -138,12 +139,14 @@ tasks.register("jacocoCoverage", JacocoReport::class) {
 
 tasks.register("makeTestReport") {
     dependsOn("connectedDebugAndroidTest", "jacocoCoverage")
-    val folder = "reports"
-    val source = "$buildDir/$folder"
-    val destination = "${project.projectDir}/$folder"
-    delete(destination)
-    copy {
-        from(source)
-        into(destination)
+    doLast {
+        val folder = "reports"
+        val source = "$buildDir/$folder"
+        val destination = "${project.projectDir}/$folder"
+        delete(destination)
+        copy {
+            from(source)
+            into(destination)
+        }
     }
 }
