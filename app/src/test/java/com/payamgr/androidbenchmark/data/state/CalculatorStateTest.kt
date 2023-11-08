@@ -4,6 +4,7 @@ import androidx.test.filters.SmallTest
 import com.payamgr.androidbenchmark.data.model.Operation
 import com.payamgr.androidbenchmark.util.forEachThis
 import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @SmallTest
@@ -194,11 +195,46 @@ class CalculatorStateTest {
         }
     }
 
-    /**
-     * Just to make Jacoco happy.
-     */
-    @Test
-    fun `empty constructor test`() {
-        assertThat(CalculatorState().result).isEqualTo("0")
+    @Nested
+    inner class Constructors {
+        @Test
+        fun `empty test`() {
+            assertThat(CalculatorState().result).isEqualTo("0")
+        }
+
+        @Test
+        fun `with num1 test`() {
+            assertThat(CalculatorState(1).result).isEqualTo("1")
+        }
+
+        @Test
+        fun `with num1 + num2 test`() {
+            assertThat(CalculatorState(1, operation = Operation.Sub).result).isEqualTo("1")
+        }
+
+        @Test
+        fun `with num1 + operation test`() {
+            assertThat(CalculatorState(1, 2).result).isEqualTo("3")
+        }
+
+        @Test
+        fun `with num2 test`() {
+            assertThat(CalculatorState(num2 = 2).result).isEqualTo("2")
+        }
+
+        @Test
+        fun `with num2 + operation test`() {
+            assertThat(CalculatorState(num2 = 2, operation = Operation.Sub).result).isEqualTo("-2")
+        }
+
+        @Test
+        fun `with operation test`() {
+            assertThat(CalculatorState(operation = Operation.Mul).result).isEqualTo("0")
+        }
+
+        @Test
+        fun `with num1 + num2 + operation test`() {
+            assertThat(CalculatorState(2, 3, Operation.Pow).result).isEqualTo("8")
+        }
     }
 }

@@ -7,7 +7,9 @@ plugins {
     id("kotlin-parcelize")
     kotlin("kapt")
     jacoco
+    id("org.jetbrains.kotlinx.kover")
 }
+
 val packageName = "com.payamgr.androidbenchmark"
 
 jacoco { toolVersion = "0.8.11" }
@@ -138,7 +140,8 @@ tasks.register("jacocoCoverage", JacocoReport::class) {
 }
 
 tasks.register("makeTestReport") {
-    dependsOn("connectedDebugAndroidTest", "jacocoCoverage")
+//    dependsOn("connectedDebugAndroidTest", "jacocoCoverage")
+    dependsOn("connectedDebugAndroidTest", "koverHtmlReportDebug")
     doLast {
         val folder = "reports"
         val source = "$buildDir/$folder"
@@ -147,6 +150,21 @@ tasks.register("makeTestReport") {
         copy {
             from(source)
             into(destination)
+        }
+    }
+}
+
+koverReport {
+    filters {
+        excludes {
+            classes(
+                "dagger*",
+                "hilt*",
+                "$packageName.AndroidBenchmarkApplication*",
+                "$packageName.data.hilt.*",
+                "$packageName.data.model.*",
+                "$packageName.ui.*",
+            )
         }
     }
 }

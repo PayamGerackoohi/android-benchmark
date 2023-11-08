@@ -8,6 +8,7 @@ A benchmark to integrate the latest technologies in android realm altogether.
 - [x] Mavericks (v3.0.7)
 - [x] Unit Test (Junit v5.10.0)
 - [x] UI Test (Junit v4.13.2)
+- [x] Kover (v0.7.4)
 - [x] Jacoco (v0.8.11)
 
 ## Pages
