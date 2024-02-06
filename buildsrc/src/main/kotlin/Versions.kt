@@ -1,12 +1,15 @@
 import org.gradle.api.JavaVersion
 
+// Keep: used in the CI/CD to retrieve the app version
+private val appVersionName = "0.0.1"
+
 object Versions {
     val app = App()
     val java = JavaVersion.VERSION_17
     val dependencies = Dependencies()
 
     class App {
-        val name = "1.0.0"
+        val name = appVersionName
         val code = 1
     }
 
@@ -18,6 +21,7 @@ object Versions {
 
         class Android {
             val core = "1.9.0"
+            val splashscreen = "1.0.1"
             val kotlin = Kotlin()
             val compose = Compose()
 

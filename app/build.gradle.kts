@@ -1,5 +1,11 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.jetbrains.kotlin.konan.properties.Properties
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -11,8 +17,14 @@ plugins {
 }
 
 val packageName = "com.payamgr.androidbenchmark"
+val buildDate: String = SimpleDateFormat("yyMMdd-HHmm").format(Date())
+val appName = "android-benchmark"
+val version = "v${Versions.app.name}"
 
 jacoco { toolVersion = "0.8.11" }
+
+val keystore =
+    Properties().apply { load(FileInputStream(rootProject.file("keystore/keystore.properties"))) }
 
 android {
     namespace = packageName
@@ -31,10 +43,28 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(keystore.getProperty("storeFile"))
+            storePassword = keystore.getProperty("storePassword")
+            keyAlias = keystore.getProperty("keyAlias")
+            keyPassword = keystore.getProperty("keyPassword")
+        }
+    }
     buildTypes {
+        applicationVariants.all {
+            val meta = if (buildType.name == "release") "" else "-$buildDate"
+            outputs.all {
+                (this as BaseVariantOutputImpl).outputFileName = "$appName-$version$meta.apk"
+            }
+        }
         release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     Versions.apply {
@@ -74,6 +104,7 @@ android {
 Versions.dependencies {
     dependencies {
         implementation("androidx.core:core-ktx:${android.core}")
+        implementation("androidx.core:core-splashscreen:${android.splashscreen}")
         implementation("androidx.lifecycle:lifecycle-runtime-ktx:${android.kotlin.lifecycleRuntime}")
         implementation("androidx.activity:activity-compose:${android.compose.activity}")
         implementation(platform("androidx.compose:compose-bom:${android.compose.bom}"))
@@ -82,6 +113,7 @@ Versions.dependencies {
         implementation("androidx.compose.ui:ui-tooling-preview")
         implementation("androidx.compose.material3:material3")
         implementation("androidx.compose.material:material-icons-extended:${android.compose.icons}")
+        implementation("androidx.compose.animation:animation-graphics:1.6.0")
         implementation("com.airbnb.android:mavericks:$mavericks")
         implementation("com.airbnb.android:mavericks-compose:$mavericks")
         implementation("com.airbnb.android:mavericks-hilt:$mavericks")
@@ -130,6 +162,7 @@ tasks.register("jacocoCoverage", JacocoReport::class) {
     val sourceBase = "com/payamgr/androidbenchmark"
     val excludes = listOf(
         "$sourceBase/AndroidBenchmarkApplication*",
+        "$sourceBase/data/hilt/**",
         "$sourceBase/data/model/**",
         "$sourceBase/ui/**",
     )
@@ -160,6 +193,7 @@ koverReport {
             classes(
                 "dagger*",
                 "hilt*",
+                "*_Factory*",
                 "$packageName.AndroidBenchmarkApplication*",
                 "$packageName.data.hilt.*",
                 "$packageName.data.model.*",

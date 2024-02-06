@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>app Coverage Report > GeneralExtensionsKt</title>
+  <title>app Coverage Report > CalculatorState</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,18 +19,15 @@
 <div class="breadCrumbs">
 Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.payamgr.androidbenchmark.util</a>
+    <a href="../index.html">com.payamgr.androidbenchmark.data.state</a>
 </div>
 
-<h1>Coverage Summary for Class: GeneralExtensionsKt (com.payamgr.androidbenchmark.util)</h1>
+<h1>Coverage Summary for Class: CalculatorState (com.payamgr.androidbenchmark.data.state)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -49,7 +46,7 @@ Current scope: app<span class="separator">|</span>    <a href="../../index.html"
 </th>
 </tr>
 <tr>
-  <td class="name">GeneralExtensionsKt</td>
+  <td class="name">CalculatorState</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -63,10 +60,67 @@ Current scope: app<span class="separator">|</span>    <a href="../../index.html"
     100%
   </span>
   <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (56/56)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CalculatorState$result$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
     (1/1)
   </span>
 </td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (71/71)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">CalculatorState$result$2$WhenMappings</td>
     <td class="coverageStat"/>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -80,11 +134,26 @@ Current scope: app<span class="separator">|</span>    <a href="../../index.html"
     100%
   </span>
   <span class="absValue">
-    (8/8)
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (127/127)
   </span>
 </td>
 </tr>
-
 </table>
 
 <br/>
@@ -92,9 +161,32 @@ Current scope: app<span class="separator">|</span>    <a href="../../index.html"
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.payamgr.androidbenchmark.util
+<code class="sourceCode" id="sourceCode">&nbsp;package com.payamgr.androidbenchmark.data.state
 &nbsp;
-<b class="fc">&nbsp;inline fun &lt;T&gt; Iterable&lt;T&gt;.forEachThis(action: T.() -&gt; Unit) = forEach { it.action() }</b>
+&nbsp;import com.airbnb.mvrx.MavericksState
+&nbsp;import com.airbnb.mvrx.PersistState
+&nbsp;import com.payamgr.androidbenchmark.data.RootCalculator
+&nbsp;import com.payamgr.androidbenchmark.data.decimalFormat
+&nbsp;import com.payamgr.androidbenchmark.data.model.Operation
+&nbsp;import kotlin.math.pow
+&nbsp;
+<b class="fc">&nbsp;data class CalculatorState(</b>
+<b class="fc">&nbsp;    @PersistState val num1: Int = 0,</b>
+<b class="fc">&nbsp;    @PersistState val num2: Int = 0,</b>
+<b class="fc">&nbsp;    @PersistState val operation: Operation = Operation.Add,</b>
+&nbsp;) : MavericksState {
+<b class="fc">&nbsp;    val result: String by lazy {</b>
+<b class="fc">&nbsp;        when (operation) {</b>
+<b class="fc">&nbsp;            Operation.Add -&gt; (num1 + num2).decimalFormat()</b>
+<b class="fc">&nbsp;            Operation.Sub -&gt; (num1 - num2).decimalFormat()</b>
+<b class="fc">&nbsp;            Operation.Mul -&gt; (num1 * num2).decimalFormat()</b>
+<b class="fc">&nbsp;            Operation.Div -&gt; (num1.toFloat() / num2.toFloat()).decimalFormat()</b>
+<b class="fc">&nbsp;            Operation.Pow -&gt; num1.toDouble().pow(num2.toDouble()).toFloat().decimalFormat()</b>
+<b class="fc">&nbsp;            Operation.Root -&gt; RootCalculator.root(num1, num2)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
 </code>
 </pre>
 </div>
@@ -118,7 +210,7 @@ Current scope: app<span class="separator">|</span>    <a href="../../index.html"
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-11-08 15:30</div>
+    <div style="float:right;">generated on 2024-02-05 21:55</div>
 </div>
 </body>
 </html>
