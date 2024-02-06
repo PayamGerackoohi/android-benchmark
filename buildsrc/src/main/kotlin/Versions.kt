@@ -1,7 +1,7 @@
 import org.gradle.api.JavaVersion
 
 // Keep: used in the CI/CD to retrieve the app version
-private val appVersionName = "0.0.1"
+private const val appVersionName = "0.0.1"
 
 object Versions {
     val app = App()
