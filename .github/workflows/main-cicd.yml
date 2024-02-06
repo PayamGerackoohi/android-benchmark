@@ -63,7 +63,7 @@ jobs:
           GPG_KEYSTORE_PASSPHRASE: ${{ secrets.GPG_KEYSTORE_PASSPHRASE }}
 
       - name: Build with Gradle
-        run: ./gradlew assemble
+        run: ./gradlew assembleRelease
 
       - name: Test
         run: ./gradlew testReleaseUnitTest
