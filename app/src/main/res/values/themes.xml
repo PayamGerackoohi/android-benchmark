@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AndroidBenchmark" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.StartUp" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!--todo Google Splashscreen API does not animate the icon for Android 12- -->
+    <!--<style name="Theme.StartUp" parent="Theme.SplashScreen.IconBackground">-->
+    <!--    <item name="windowSplashScreenBackground">@color/splash_background</item>-->
+    <!--    <item name="windowSplashScreenAnimatedIcon">@drawable/translate_splash</item>-->
+    <!--    <item name="windowSplashScreenAnimationDuration">2000</item>-->
+    <!--    <item name="postSplashScreenTheme">@style/Theme.AndroidBenchmark</item>-->
+    <!--    <item name="windowSplashScreenIconBackgroundColor">@color/white</item>-->
+    <!--</style>-->
+</resources>
