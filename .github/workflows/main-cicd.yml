@@ -14,7 +14,7 @@ jobs:
       isNewTag: ${{ steps.check-version.outputs.isNewTag }}
     steps:
       - uses: actions/checkout@v3
-  
+
       - name: Extract the app version
         id: app-version
         run: >
@@ -66,22 +66,28 @@ jobs:
         run: ./gradlew assembleRelease
 
       - name: Test
-        run: ./gradlew testReleaseUnitTest
+        run: ./gradlew koverHtmlReportRelease
+      #  run: ./gradlew testReleaseUnitTest
 
       - name: Gather the archive files
         id: app
         run: |
+          set -e
+
           rm -rf archive
           mkdir -p archive/app
-          mkdir -p archive/test-result
+          mkdir -p archive/test-results/unit-tests
+          mkdir -p archive/test-results/kover-report
+
           mv app/build/outputs/apk/release/*.apk archive/app
-          mv app/build/reports/tests/testReleaseUnitTest/* archive/test-result
+          mv app/build/reports/tests/testReleaseUnitTest/* archive/test-results/unit-tests
+          mv app/build/reports/kover/htmlRelease/* archive/test-results/kover-report
 
           pushd archive
             pushd app
               appName=`ls | head -1 | rev | cut -c 5- | rev`
             popd
-            tar -czf test-result.tgz -C test-result .
+            tar -czf test-results.tgz -C test-results .
           popd
           echo "name=${appName}" >> "$GITHUB_OUTPUT";
 
@@ -95,11 +101,11 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Test Results
-          path: archive/test-result.tgz
+          path: archive/test-results.tgz
 
   deploy:
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - check-version
       - build-test-archive
     env:
@@ -113,7 +119,7 @@ jobs:
           path: dist
 
       - name: Make release
-        run : >
+        run: >
           gh release create $version
           dist/**/*
           --generate-notes

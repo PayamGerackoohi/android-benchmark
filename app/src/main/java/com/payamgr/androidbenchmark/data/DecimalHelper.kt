@@ -19,7 +19,7 @@ object DecimalHelper {
         }
     }
 
-    fun epsilonOf(precision: Int) = 10.0.pow(-precision.toDouble()).toFloat()
+    fun epsilonOf(precision: Int) = 10f.pow(-precision.toFloat())
 }
 
 fun Float.isCloseTo(other: Float, epsilon: Float) = abs(this - other) < abs(epsilon)

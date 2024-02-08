@@ -21,28 +21,28 @@ val buildDate: String = SimpleDateFormat("yyMMdd-HHmm").format(Date())
 val appName = "android-benchmark"
 val version = "v${Versions.app.name}"
 
-jacoco { toolVersion = "0.8.11" }
+jacoco { toolVersion = Versions.dependencies.test.jacoco }
 
-val keystore =
-    Properties().apply { load(FileInputStream(rootProject.file("keystore/keystore.properties"))) }
+val keystore = FileInputStream(rootProject.file("keystore/keystore.properties")).let { file ->
+    Properties().apply { load(file) }
+}
 
 android {
     namespace = packageName
     compileSdk = 34
-
     defaultConfig {
         applicationId = packageName
         minSdk = 24
         targetSdk = 33
-        versionCode = Versions.app.code
-        versionName = Versions.app.name
-
+        Versions.app {
+            versionCode = code
+            versionName = name
+        }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
     }
-
     signingConfigs {
         create("release") {
             storeFile = file(keystore.getProperty("storeFile"))
@@ -59,7 +59,9 @@ android {
             }
         }
         release {
+            isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -79,12 +81,8 @@ android {
             jvmToolchain(java.ordinal + 1)
         }
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
+    buildFeatures { compose = true }
+    composeOptions { kotlinCompilerExtensionVersion = "1.4.3" }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -113,7 +111,7 @@ Versions.dependencies {
         implementation("androidx.compose.ui:ui-tooling-preview")
         implementation("androidx.compose.material3:material3")
         implementation("androidx.compose.material:material-icons-extended:${android.compose.icons}")
-        implementation("androidx.compose.animation:animation-graphics:1.6.0")
+        implementation("androidx.compose.animation:animation-graphics:${android.compose.animation}")
         implementation("com.airbnb.android:mavericks:$mavericks")
         implementation("com.airbnb.android:mavericks-compose:$mavericks")
         implementation("com.airbnb.android:mavericks-hilt:$mavericks")
@@ -137,9 +135,7 @@ Versions.dependencies {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
+kapt { correctErrorTypes = true }
 
 tasks.withType<Test> {
     useJUnitPlatform()

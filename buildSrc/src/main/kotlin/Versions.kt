@@ -11,6 +11,8 @@ object Versions {
     class App {
         val name = appVersionName
         val code = 1
+
+        operator fun invoke(action: App.() -> Unit) = action()
     }
 
     class Dependencies {
@@ -33,6 +35,7 @@ object Versions {
                 val bom = "2023.03.00"
                 val activity = "1.8.0"
                 val icons = "1.5.3"
+                val animation = "1.6.0"
             }
         }
 
@@ -40,6 +43,7 @@ object Versions {
             val assertj = "3.11.1"
             val mockk = "1.13.8"
             val espresso = "3.5.1"
+            val jacoco = "0.8.11"
             val jUnit = "5.10.0"
             val android = Android()
             val kotlin = Kotlin()

@@ -12,9 +12,9 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AppModule {
+interface AppModule {
     @Binds
-    abstract fun splashScreenController(impl: SplashScreenControllerImpl): SplashScreenController
+    fun splashScreenController(impl: SplashScreenControllerImpl): SplashScreenController
 }
 
 @EntryPoint

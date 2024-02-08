@@ -18,7 +18,7 @@ data class CalculatorState(
             Operation.Sub -> (num1 - num2).decimalFormat()
             Operation.Mul -> (num1 * num2).decimalFormat()
             Operation.Div -> (num1.toFloat() / num2.toFloat()).decimalFormat()
-            Operation.Pow -> num1.toDouble().pow(num2.toDouble()).toFloat().decimalFormat()
+            Operation.Pow -> num1.toFloat().pow(num2.toFloat()).decimalFormat()
             Operation.Root -> RootCalculator.root(num1, num2)
         }
     }

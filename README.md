@@ -10,6 +10,7 @@ A benchmark to integrate the latest technologies in android realm altogether.
 - [x] UI Test (Junit v4.13.2)
 - [x] Kover (v0.7.4)
 - [x] Jacoco (v0.8.11)
+- [x] Google Splashscreen API (v1.0.1)
 
 # Screenshots
 The screenshots are automatically captured, resized and compressed from the instrumented testes.
@@ -43,7 +44,7 @@ Run the scripts from the project root directory.
 <!-- - Edit `adb` and `JAVA_HOME` in the script to the  -->
 For the first time, set your `adb` and `JAVA_HOME` for `jdk-17` into the `env` file. Similar this on OSX:
 ```sh
-rm scripts/env
+rm -f scripts/env
 echo 'adb=/Users/payam1991gr/Library/Android/sdk/platform-tools/adb' >> scripts/env
 echo 'JAVA_HOME=/Applications/Android Studio.app/Contents/jbr/Contents/Home' >> scripts/env
 ```

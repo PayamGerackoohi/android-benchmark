@@ -1,4 +1,4 @@
-package com.payamgr.androidbenchmark.ui.page.home
+package com.payamgr.androidbenchmark.ui.page.splashscreen
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -12,9 +12,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.payamgr.androidbenchmark.ui.module.SplashScreen
-import com.payamgr.androidbenchmark.ui.page.calculator.CalculatorView
 
-object Home {
+object Splashscreen {
     @Composable
     fun Page(
         isUsingGoogleSplashScreen: Boolean,
@@ -22,9 +21,9 @@ object Home {
         keepSplashScreen: Boolean,
         hideSplashScreen: () -> Unit,
         animationStart: suspend () -> Unit = {},
+        target: @Composable () -> Unit,
     ) {
-        if (isUsingGoogleSplashScreen)
-            CalculatorView.Page()
+        if (isUsingGoogleSplashScreen) target()
         else {
             var showSplash by remember { mutableStateOf(keepSplashScreen) }
             Crossfade(
@@ -39,6 +38,7 @@ object Home {
                         showSplash = false
                         hideSplashScreen()
                     },
+                    target = target,
                     animationStart = animationStart,
                 )
             }
@@ -50,7 +50,8 @@ object Home {
         duration: Long,
         isSplash: Boolean,
         hideSplash: () -> Unit,
-        animationStart: suspend () -> Unit = {}
+        animationStart: suspend () -> Unit = {},
+        target: @Composable () -> Unit,
     ) {
         if (isSplash)
             SplashScreen.Module(duration = duration, onEnd = hideSplash, start = animationStart)
@@ -59,7 +60,7 @@ object Home {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                CalculatorView.Page()
+                target()
             }
     }
 }

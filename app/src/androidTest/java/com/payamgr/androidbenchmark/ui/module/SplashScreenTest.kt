@@ -6,10 +6,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.hasStateDescription
 import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.test.filters.MediumTest
 import com.payamgr.androidbenchmark.ui.theme.AndroidBenchmarkTheme
+import com.payamgr.androidbenchmark.util.ActivityTest
 import com.payamgr.androidbenchmark.util.Screenshot
 import com.payamgr.androidbenchmark.util.take
 import io.mockk.confirmVerified
@@ -18,13 +19,10 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.runTest
-import org.junit.Rule
 import org.junit.Test
 
-class SplashScreenTest {
-    @get:Rule
-    val rule = createComposeRule()
-
+@MediumTest
+class SplashscreenActivityTest : ActivityTest() {
     @Test
     fun moduleTest() = runTest {
         val onEnd = mockk<() -> Unit>()

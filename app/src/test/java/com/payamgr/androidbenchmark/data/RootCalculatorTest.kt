@@ -2,7 +2,7 @@ package com.payamgr.androidbenchmark.data
 
 import androidx.test.filters.SmallTest
 import com.payamgr.androidbenchmark.util.forEachThis
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 @SmallTest
@@ -71,8 +71,8 @@ class RootCalculatorTest {
             Data(-4, -2, "-0.5i"),
             Data(-1000, 1, "-1,000"),
         ).forEachThis {
-//            println("Data($a, $b, \"${RootCalculator.root(a, b)}\"),")
-            Assertions.assertThat(RootCalculator.root(a, b))
+            // KEEP: println("Data($a, $b, \"${RootCalculator.root(a, b)}\"),")
+            assertThat(RootCalculator.root(a, b))
                 .`as`("%s", this)
                 .isEqualTo(result)
         }
@@ -80,14 +80,14 @@ class RootCalculatorTest {
 
     @Test
     fun root() {
-        data class Data(val magnitude: Double, val phase: Double, val result: String)
+        data class Data(val magnitude: Float, val phase: Float, val result: String)
         listOf(
-            Data(0.0, 0.0, "0"),
-            Data(Double.POSITIVE_INFINITY, 0.0, "∞"),
-            Data(Double.NEGATIVE_INFINITY, 0.0, "-∞"),
+            Data(0f, 0f, "0"),
+            Data(Float.POSITIVE_INFINITY, 0f, "∞"),
+            Data(Float.NEGATIVE_INFINITY, 0f, "-∞"),
         ).forEachThis {
-//            println("Data($magnitude, $phase, \"${RootCalculator.complexOf(magnitude, phase)}\"),")
-            Assertions.assertThat(RootCalculator.complexOf(magnitude, phase))
+            // KEEP: println("Data($magnitude, $phase, \"${RootCalculator.complexOf(magnitude, phase)}\"),")
+            assertThat(RootCalculator.complexOf(magnitude, phase))
                 .`as`("%s", this)
                 .isEqualTo(result)
         }

@@ -44,12 +44,12 @@ class MainActivityTest {
 
         // Slide the num1 slider to -3
         rule.onNodeWithContentDescription("Slider Num 1").performTouchInput { swipeLeft() }
-        rule.onNodeWithContentDescription("Slider Num 1, Value: -10").assertExists()
+        rule.onNodeWithContentDescription("Slider Num 1, Value: -10").assertIsDisplayed()
         rule.onNodeWithContentDescription("Result").assertTextEquals("-10")
 
         // Slide the num2 slider to 3
         rule.onNodeWithContentDescription("Slider Num 2").performTouchInput { swipeRight() }
-        rule.onNodeWithContentDescription("Slider Num 2, Value: 10").assertExists()
+        rule.onNodeWithContentDescription("Slider Num 2, Value: 10").assertIsDisplayed()
         rule.onNodeWithContentDescription("Result").assertTextEquals("0")
 
         // Verify the '+' Button

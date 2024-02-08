@@ -1,12 +1,15 @@
-package com.payamgr.androidbenchmark.ui.page.home
+package com.payamgr.androidbenchmark.ui.page.splashscreen
 
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import com.airbnb.mvrx.mocking.MockableMavericks
@@ -19,39 +22,43 @@ import kotlinx.coroutines.sync.Mutex
 import org.junit.Rule
 import org.junit.Test
 
-class HomeTest {
+class SplashscreenTest {
     @get:Rule
     val rule = createComposeRule()
 
     @Test
     fun page_usingTheGoogleSplashScreen_shouldShowTheCalculatorPage() {
         rule.setContent {
-            Home.Page(
+            Splashscreen.Page(
                 isUsingGoogleSplashScreen = true,
                 duration = 0L,
                 keepSplashScreen = false,
                 hideSplashScreen = {},
-            )
+            ) {
+                DummyContentPage()
+            }
         }
 
         // Verify the initial state
-        rule.onNodeWithTag("CalculatorView").assertIsDisplayed()
+        rule.onNodeWithText("Content Page").assertIsDisplayed()
         rule.onAllNodesWithContentDescription("Splashscreen").assertCountEquals(0)
     }
 
     @Test
     fun page_notUsingTheGoogleSplashScreen_and_notKeepSplashScreen_shouldShowSkipTheCustomSplashscreen() {
         rule.setContent {
-            Home.Page(
+            Splashscreen.Page(
                 isUsingGoogleSplashScreen = true,
                 duration = 0L,
                 keepSplashScreen = false,
                 hideSplashScreen = {},
-            )
+            ) {
+                DummyContentPage()
+            }
         }
 
         // Verify the initial state
-        rule.onNodeWithTag("CalculatorView").assertIsDisplayed()
+        rule.onNodeWithText("Content Page").assertIsDisplayed()
         rule.onAllNodesWithContentDescription("Splashscreen").assertCountEquals(0)
     }
 
@@ -63,27 +70,29 @@ class HomeTest {
 
         MockableMavericks.initialize(app)
         rule.setContent {
-            Home.Page(
+            Splashscreen.Page(
                 isUsingGoogleSplashScreen = false,
                 duration = 10L,
                 keepSplashScreen = true,
                 hideSplashScreen = hideSplashScreen,
                 animationStart = { animationMutex.lock() },
-            )
+            ) {
+                DummyContentPage()
+            }
         }
 
         // Verify the initial state
         rule.onNodeWithContentDescription("Splashscreen").assertIsDisplayed()
-        rule.onAllNodesWithTag("CalculatorView").assertCountEquals(0)
+        rule.onAllNodesWithText("Content Page").assertCountEquals(0)
 
         // Wait until the end of the animation
         animationMutex.unlock()
         rule.waitUntil {
-            rule.onAllNodesWithTag("CalculatorView").fetchSemanticsNodes().isNotEmpty()
+            rule.onAllNodesWithText("Content Page").fetchSemanticsNodes().isNotEmpty()
         }
 
         // Verify the transition to the 'Calculator' page
-        rule.onNodeWithTag("CalculatorView").assertIsDisplayed()
+        rule.onNodeWithText("Content Page").assertIsDisplayed()
         rule.onAllNodesWithContentDescription("Splashscreen").assertCountEquals(0)
         verify { hideSplashScreen() }
 
@@ -97,19 +106,21 @@ class HomeTest {
         justRun { hideSplash() }
 
         rule.setContent {
-            Home.Content(
+            Splashscreen.Content(
                 duration = 10L,
                 isSplash = true,
                 hideSplash = {
                     hideSplash()
                     isHideSplashCalled = true
                 },
-            )
+            ) {
+                DummyContentPage()
+            }
         }
 
         // Verify the initial state
         rule.onNodeWithContentDescription("Splashscreen").assertIsDisplayed()
-        rule.onAllNodesWithTag("CalculatorView").assertCountEquals(0)
+        rule.onAllNodesWithText("Content Page").assertCountEquals(0)
 
         // Wait until the end of the animation
         rule.waitUntil { isHideSplashCalled }
@@ -123,15 +134,23 @@ class HomeTest {
     @Test
     fun content_notSplashMode_shouldShowTheCalculatorPage() {
         rule.setContent {
-            Home.Content(
+            Splashscreen.Content(
                 duration = 0L,
                 isSplash = false,
                 hideSplash = {},
-            )
+            ) {
+                DummyContentPage()
+            }
         }
 
         // Verify the initial state
-        rule.onNodeWithTag("CalculatorView").assertIsDisplayed()
+        rule.onNodeWithText("Content Page").assertIsDisplayed()
         rule.onAllNodesWithContentDescription("Splashscreen").assertCountEquals(0)
+    }
+
+    @Composable
+    @Suppress("TestFunctionName")
+    private fun DummyContentPage() {
+        Text(text = "Content Page")
     }
 }
